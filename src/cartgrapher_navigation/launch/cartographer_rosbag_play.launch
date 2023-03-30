@@ -1,0 +1,30 @@
+<launch>
+    <!-- rosbag -->
+    <arg name="bag_file_name" value="2021-10-28-23-01-17"/>
+    <node pkg="rosbag" type="play" name="rosbag_play" output="screen" args="--clock $(find tsukuba_challenge_logdata)/home/$(arg bag_file_name).bag"/>
+    
+    <!-- outdoor -->
+    <node name="cartographer_node" pkg="cartographer_ros" type="cartographer_node" args="
+          -configuration_directory
+              $(find cartgrapher_navigation)/configuration_files
+          -configuration_basename outdoor_2d_with_imu.lua" output="screen">
+          <remap from="scan" to="/scan" />
+          <remap from="imu" to="/imu/data" />
+    </node>
+
+    <!-- outdoor -->
+    <!--<node name="cartographer_node" pkg="cartographer_ros" type="cartographer_node" args="
+          -configuration_directory
+              $(find cartgrapher_navigation)/configuration_files
+          -configuration_basename outdoor_2d_with_imu_odom.lua" output="screen">
+          <remap from="scan" to="/scan" />
+          <remap from="imu" to="/imu/data" />
+          <remap from="odom" to="/odom" />
+    </node>-->
+
+	<!-- Additional node which converts Cartographer map into ROS occupancy grid map. Not used and can be skipped in this case -->
+    <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.15" />
+
+    <!-- Start RViz with custom view -->
+    <node pkg="rviz" type="rviz" name="show_rviz" args="-d $(find cartgrapher_navigation)/rviz/navigation.rviz"/>    
+</launch>

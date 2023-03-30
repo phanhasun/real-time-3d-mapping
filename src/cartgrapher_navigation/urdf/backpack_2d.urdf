@@ -1,0 +1,58 @@
+<robot name="cartographer_backpack_2d">
+  <material name="orange">
+    <color rgba="1.0 0.5 0.2 1" />
+  </material>
+  <material name="gray">
+    <color rgba="0.2 0.2 0.2 1" />
+  </material>
+
+  <link name="imu">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="0.06 0.04 0.02" />
+      </geometry>
+      <material name="orange" />
+    </visual>
+  </link>
+
+  <link name="laser">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.05" radius="0.03" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+  </link>
+
+  <link name="gps">
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.05" radius="0.03" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+  </link>
+
+  <link name="base_link" />
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="imu" />
+    <origin xyz="0 0 0" />
+  </joint>
+
+  <joint name="laser_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="laser" />
+    <origin xyz="0.1007 0 0.0558" />
+  </joint>
+
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="gps" />
+    <origin rpy="0 -1.570796 3.141593" xyz="0.1007 0 0.1814" />
+  </joint>
+</robot>

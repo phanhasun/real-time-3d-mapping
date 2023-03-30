@@ -1,0 +1,35 @@
+
+<launch>
+    <!-- Load robot description and start state publisher-->
+    <param name="robot_description" textfile="$(find cartgrapher_navigation)/urdf/robot_model.urdf" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+		
+
+
+    <!-- outdoor -->
+    <node name="cartographer_node" pkg="cartographer_ros" type="cartographer_node" args="
+          -configuration_directory
+              $(find cartgrapher_navigation)/configuration_files
+          -configuration_basename outdoor_2d.lua" output="screen">
+    </node>
+
+		<!-- Additional node which converts Cartographer map into ROS occupancy grid map. Not used and can be skipped in this case -->
+    <!--<node name="cartographer_occupancy_grid_node" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.05" />-->
+    <!-- <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.15" /> -->
+    <arg name="map_file" default="$(find cartgrapher_navigation)/map_provider/phong1.yaml"/>
+    <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)"/>
+    <!-- move base -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+      <rosparam file="$(find cartgrapher_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+      <rosparam file="$(find cartgrapher_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+      <rosparam file="$(find cartgrapher_navigation)/param/local_costmap_params.yaml" command="load"/>
+      <rosparam file="$(find cartgrapher_navigation)/param/global_costmap_params.yaml" command="load"/>
+      <!--<rosparam file="$(find cartgrapher_navigation)/param/base_local_planner_params.yaml" command="load"/>-->
+      <rosparam file="$(find cartgrapher_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+      <rosparam file="$(find cartgrapher_navigation)/param/move_base_params.yaml" command="load"/>
+    </node>
+
+    <!-- Start RViz with custom view -->
+    <node pkg="rviz" type="rviz" name="show_rviz" args="-d $(find cartgrapher_navigation)/rviz/navigation.rviz"/>    
+</launch>
