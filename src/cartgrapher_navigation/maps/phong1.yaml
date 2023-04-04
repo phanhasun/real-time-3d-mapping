@@ -1,8 +1,0 @@
-image: phong1.pgm
-resolution: 0.150000
-origin: [-2.900000, -1.600000, 0.000000]
-negate: 0
-occupied_thresh: 0.65
-free_thresh: 0.196
-
-
