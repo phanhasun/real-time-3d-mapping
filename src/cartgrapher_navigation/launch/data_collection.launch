@@ -1,0 +1,14 @@
+<launch>
+  <!-- command -->
+  <!-- rosbag record /scan /imu/data /initialpose /tf /tf_static -->
+
+  <!-- Run hokuyo lidar -->
+  <include file="$(find joy_to_twist)/launch/hokuyo_lidar.launch" />
+
+  <!-- IMU publish -->
+  <include file="$(find adi_driver)/launch/adis16470.launch" />
+
+   <!-- cartographer.launch -->
+  <include file="$(find cartgrapher_navigation)/launch/cartographer.launch" />
+  
+</launch>
