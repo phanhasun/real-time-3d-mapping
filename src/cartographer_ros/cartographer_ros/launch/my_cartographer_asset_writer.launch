@@ -1,0 +1,15 @@
+<launch>
+  <arg name="bag_filename" default="/home/sun/sun/KLTN/src/cartographer_navigation/rviz/your_bag_file.bag"/>
+  <arg name="map_filestem" default="my_map"/>
+
+  <!-- Start Cartographer node to generate a map -->
+  <include file="$(find cartographer_ros)/launch/my_cartographer_3d.launch">
+    <arg name="bag_filenames" value="$(arg bag_filename)"/>
+  </include>
+
+  <!-- Write assets to file -->
+  <node pkg="cartographer_ros" type="cartographer_asset_writer"
+        name="cartographer_asset_writer" output="screen"
+        args="-bag_filename $(arg bag_filename) -map_filestem $(arg map_filestem)">
+  </node>
+</launch>

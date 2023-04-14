@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="bag_filenames" default="" />
+
+  <!-- Load the Cartographer ROS node -->
+  <include file="$(find cartographer_ros)/launch/cartographer.launch">
+    <!-- Set the parameters for Cartographer ROS -->
+    ...
+  </include>
+
+  <!-- Load the Rviz visualization node -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find cartographer_ros)/configuration_files/demo_3d.rviz"/>
+</launch>
